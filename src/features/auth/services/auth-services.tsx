@@ -14,6 +14,19 @@ export const authService = {
       throw error;
     }
 
+    // Create profile record after successful signup
+    if (data.user) {
+      const { error: profileError } = await supabase.from("profiles").insert({
+        id: data.user.id,
+        email: data.user.email,
+      });
+
+      if (profileError) {
+        // You might want to handle this error appropriately
+        throw new Error("Failed to create user profile");
+      }
+    }
+
     return data;
   },
 
